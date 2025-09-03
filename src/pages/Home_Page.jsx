@@ -1,4 +1,4 @@
-{/*import Navbar_Menu from "../components/Navbar_Menu";
+import Navbar_Menu from "../components/Navbar_Menu";
 import {
   Container,
   Button,
@@ -60,9 +60,9 @@ export default function Home_Page() {
       >
        
           {/* BANNER */}
-       {/*}   <div className="banner" >
+        <div className="banner" >
           
-          <Container  style={{ padding: "5% 0", position: "relative", bottom:"100px" }} >
+          <Container  style={{ padding: "5% 0", position: "relative", bottom:"50px" }} >
             <Row>
               <Col sm={12}>
                 <div
@@ -160,13 +160,13 @@ export default function Home_Page() {
               </div>
             </InputGroup>
           </Container>*/}
-      {/*}    <div >
+        {/*} <div >
           <BrowserSlider/>
-          </div>
+          </div>*/}
 </div>
               </Col>
                   
-             {/*} <Col sm={6}>
+              {/*<Col sm={6}>
                 <div>
                   <img
                     src={oilproducts}
@@ -179,7 +179,7 @@ export default function Home_Page() {
                   />
                 </div>
               </Col>*/}
-          {/*}  </Row>
+            </Row>
                 </Container>
           </div>
           
@@ -239,7 +239,7 @@ export default function Home_Page() {
               
 
                 {/*<BrowserSlider/>*/}
-              {/*</Col>
+              </Col>
             </Row>
           </Container>
 </div>
@@ -252,8 +252,11 @@ export default function Home_Page() {
           >
             <Container style={{ marginTop: "5%" }}>
               <Row>
-                <Col sm={6}>
-                <img src="/media/wodeyar.webp" alt="wodeyar" style={{width:"100%", height:"450px", objectFit:"cover"}}/>
+                <Col sm={3}>
+                <img src="/media/Krishnaraja-Wodeyar.jpg" alt="wodeyar" style={{width:"100%", height:"400px", objectFit:"cover"}}/>
+                </Col>
+                <Col sm={3}>
+                <img src="/media/vishveshvaraiah.jpg" alt="vishveshvaraiah" style={{width:"100%", height:"400px", objectFit:"cover"}}/>
                 </Col>
                 <Col sm={6}>
                
@@ -295,7 +298,7 @@ Join us in our journey to revive the traditional ways of oil extraction, while e
 
             {/* SHOP NOW*/}
 
-          {/*}  <div
+           <div
               style={{
                 textAlign: "center",
               }}
@@ -313,15 +316,35 @@ Join us in our journey to revive the traditional ways of oil extraction, while e
                 >
                   SHOP NOW
                 </h1>
-                <div style={{marginBottom:"80px"}}>
+                <div style={{marginBottom:"0px"}}>
                   <Products_Sliders />
                 </div>
+                                          <Button
+                            onClick={() => navigate(item.link)}
+                            variant="none"
+                            className="view-button-slider mb-5"
+                            style={{
+                              fontWeight: "600",
+                              border: "none",
+                              borderRadius: "0",
+                              fontSize: "20px",
+                              padding: "6px 8px",
+                              letterSpacing: "0.3px",
+                              width: "fit-content",
+                              alignItems: "center",
+                              display: "block",
+                              fontFamily: "montserrat",
+                              marginInline:"auto"
+                            }}
+                          >
+                            View All Products
+                          </Button>
               </div>
             </div>
           </div>
 
           {/* QUALITY ASSURANCE */}
-       {/*}   <Container fluid className=" bgcolor" style={{padding:"20px"}}>
+        <Container fluid className=" bgcolor" style={{padding:"20px"}}>
             <h1
               style={{
                 textAlign: "center",
@@ -408,7 +431,7 @@ Join us in our journey to revive the traditional ways of oil extraction, while e
           </Container>
 
           {/* CHOOSE US */}
-         {/*} <div
+         <div
             style={{
               backgroundColor: "#ffff",
               padding: "5% 0",
@@ -459,225 +482,15 @@ Join us in our journey to revive the traditional ways of oil extraction, while e
             />
           </div>
           {/* REVIEWS */}
-         {/*} <Reviews />
+         <Reviews />
 
           <ScrollToTop />
 
           {/* FOOTER */}
-         {/*}  <Footer /> 
+           <Footer /> 
     
 
     </>
   );
-}*/}
-
-import Navbar_Menu from "../components/Navbar_Menu";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Carousel
-} from "react-bootstrap";
-import { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa";
-import BrowserSlider from "./BrowserSlider";
-import Products_Sliders from "./Products_Sliders";
-import FeatureGrid from "./FeatureGrid";
-import Footer from "../components/Footer";
-
-import MysuruOilsLogo from "/media/MysuruOilsLogo.png";
-import purehealthy from "/media/Group333.png";
-import naturecontent from "/media/Fromnaturetoyourkitchen.png";
-import Qualityassured from "/media/Qualityassured.png";
-import Chemicalfree from "/media/Chemicalfree.png";
-import plantbased from "/media/plantbased.png";
-import LowCholesterol from "/media/LowCholesterol.png";
-import WeightManagement from "/media/WeightManagement.png";
-import PureAndNatural from "/media/PureAndNatural.png";
-
-export default function Home_Page() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const testimonials = [
-    {
-      name: "Anjali",
-      review:
-        "Their range of dry fruits is premium—especially the almonds and anjeer. The millets have helped my family shift to a healthier diet.",
-      rating: 4,
-      image: "/media/user1.jpg",
-    },
-    {
-      name: "Suma",
-      review:
-        "I’m in love with their herbal face oils and handmade soaps. My skin has never felt this soft and radiant.",
-      rating: 5,
-      image: "/media/user2.jpg",
-    },
-    {
-      name: "Sneha",
-      review:
-        "I've been using their cold-pressed oils for months now. The purity is unmatched—no residue or smell like store brands.",
-      rating: 4,
-      image: "/media/user3.jpg",
-    },
-  ];
-
-  return (
-    <>
-      <Navbar_Menu />
-      <div className="homepage">
-        {/* Banner Section */}
-        <section className="hero-section" style={{ background: "#fdf6f0" }}>
-          <Container className="py-5 text-center">
-            <img src={MysuruOilsLogo} alt="Mysore Oils Logo" style={{ width: "220px" }} />
-            <h1 className="mt-4 mb-2" style={{ fontFamily: "Playfair Display", fontWeight: 600, fontSize: "36px" }}>
-              Pure, Natural & Traditionally Crafted Oils
-            </h1>
-            <p style={{ fontFamily: "Montserrat", fontSize: "16px", color: "#555" }}>
-              Cold-pressed excellence straight from Mysore’s rich heritage
-            </p>
-            <Button variant="dark" className="mt-3 px-5 py-2" style={{ fontFamily: "Poppins" }}>Explore Now</Button>
-          </Container>
-        </section>
-
-        {/* Browser Slider */}
-        <section>
-          <BrowserSlider />
-        </section>
-
-        {/* Icons Row */}
-        <section className="bg-light py-4">
-          <Container>
-            <Row className="text-center justify-content-center">
-              {[Qualityassured, Chemicalfree, plantbased, LowCholesterol, WeightManagement, PureAndNatural].map((icon, index) => (
-                <Col key={index} xs={4} sm={2} className="mb-3">
-                  <img src={icon} alt={`icon-${index}`} style={{ width: "60px", height: "auto" }} />
-                </Col>
-              ))}
-            </Row>
-          </Container>
-        </section>
-
-        {/* About Section */}
-        <section className="py-5 bg-white">
-          <Container>
-            <Row>
-              <Col md={6}>
-                <img src="/media/wodeyar.webp" alt="Wodeyar" style={{ width: "100%", borderRadius: "8px" }} />
-              </Col>
-              <Col md={6} className="d-flex flex-column justify-content-center">
-                <h2 className="mb-4" style={{ fontFamily: "Playfair Display", fontWeight: 700 }}>About Us</h2>
-                <p style={{ fontSize: "16px", lineHeight: 1.8, fontFamily: "Montserrat" }}>
-                  Welcome to The Mysore Oils, where tradition meets quality. Inspired by visionary leaders of our land, we are committed to preserving heritage through pure, cold-pressed oils.
-                </p>
-                <Button variant="outline-dark" className="mt-3" style={{ width: "fit-content" }}>Read More</Button>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-
-        {/* Shop Now Section */}
-        <section className="text-center py-5 bg-light">
-          <h2 style={{ fontFamily: "Playfair Display", fontSize: "32px", fontWeight: 700 }}>Shop Now</h2>
-          <Container className="mt-4">
-            <Products_Sliders />
-          </Container>
-        </section>
-
-        {/* Testimonials Section */}
-        <section style={{ backgroundColor: "#FAF8F3", padding: "60px 0" }}>
-          <Container>
-            <h2 style={{ textAlign: "center", fontFamily: "Playfair Display", fontWeight: 700 }}>
-              What Our Customers Say
-            </h2>
-            <Carousel indicators={true} interval={5000} className="mt-4">
-              {testimonials.map((t, index) => (
-                <Carousel.Item key={index}>
-                  <div
-                    className="d-flex flex-column align-items-center"
-                    style={{
-                      maxWidth: "700px",
-                      margin: "40px auto",
-                      background: "#fff",
-                      padding: "30px",
-                      borderRadius: "15px",
-                      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.05)",
-                    }}
-                  >
-                    <img
-                      src={t.image}
-                      alt={t.name}
-                      className="rounded-circle mb-3"
-                      style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                    />
-                    <p style={{ fontSize: "16px", fontFamily: "Montserrat", textAlign: "center" }}>
-                      “{t.review}”
-                    </p>
-                    <h5 style={{ marginTop: "20px", fontWeight: 600 }}>{t.name}</h5>
-                    <div>
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} color={i < t.rating ? "#D3B353" : "#ccc"} />
-                      ))}
-                    </div>
-                  </div>
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          </Container>
-        </section>
-
-        {/* Quality Assurance */}
-        <section className="py-5 bg-white">
-          <Container>
-            <h2 className="text-center mb-5" style={{ fontFamily: "Playfair Display", fontSize: "32px", fontWeight: 700 }}>Quality Assurance</h2>
-            <Row className="justify-content-center">
-              {["organicfarm.mp4", "filter.mp4", "purify.mp4", "handcraft.mp4"].map((video, index) => (
-                <Col key={index} sm={6} md={3} className="text-center mb-4">
-                  <video src={`/media/${video}`} autoPlay muted loop style={{ width: "100px", height: "100px", borderRadius: "50%" }} />
-                  <h5 className="mt-3" style={{ fontSize: "14px", fontWeight: 600 }}>Feature {index + 1}</h5>
-                  <p style={{ fontSize: "12px", color: "#666" }}>Detailed description of quality feature goes here.</p>
-                </Col>
-              ))}
-            </Row>
-          </Container>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="py-5 bg-light">
-          <Container>
-            <h2 className="text-center mb-5" style={{ fontFamily: "Playfair Display", fontSize: "32px", fontWeight: 700 }}>Why Choose Us?</h2>
-            <FeatureGrid />
-          </Container>
-        </section>
-
-        {/* Tagline Section */}
-        <section className="text-center py-5 bg-white">
-          <h2 style={{ fontSize: "32px", fontWeight: 500, fontFamily: "Montserrat" }}>
-            Fuel your favourite dishes to life with
-          </h2>
-          <h2 style={{ fontSize: "48px", fontWeight: 700, fontFamily: "Playfair Display", color: "#b38900" }}>
-            "The Mysore Oils"
-          </h2>
-          <img src="/media/fuelBanner.png" alt="Fuel Banner" style={{ width: "100%" }} />
-        </section>
-
-        <Footer />
-      </div>
-    </>
-  );
 }
-
 

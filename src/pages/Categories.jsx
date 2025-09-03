@@ -1,4 +1,4 @@
-import {
+{/*import {
   Container,
   InputGroup,
   Form,
@@ -20,10 +20,82 @@ import Navbar_Menu from "../components/Navbar_Menu";
 export default function Categories() {
   const [isVisible, setIsVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null); // Initialize as null
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
+    useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, []);
 
-  const productType = [
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("https://api.themysoreoils.com/api/categories");
+        setCategories(res.data.filter((cat) => cat.status === "Active"));
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+ useEffect(() => {
+  const fetchProducts = async () => {
+    if (!selectedCategory) {
+      setProducts([]);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axios.get("https://api.themysoreoils.com/api/products", {
+        params: { category: selectedCategory },
+      });
+
+      const formattedProducts = res.data.map((product) => ({
+        id: product._id,
+        name: product.name,
+        images: product.images,
+        Link: `/oil-products/${product.name.replace(/\s+/g, "")}`,
+        originalPrice: product.variants[0]?.price || 0,
+        discountedPrice: product.discountPrice || product.variants[0]?.price || 0,
+      }));
+      setProducts(formattedProducts);
+    } catch (err) {
+      setError("Failed to fetch products");
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, [selectedCategory]);
+
+
+  const handleCategorySelect = (categoryName) => {
+    setSelectedCategory(categoryName);
+  };
+
+  const filteredProducts = products.filter((card) =>
+    card.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+ 
+
+  {/*const productType = [
 
      {
       id: "4",
@@ -148,45 +220,15 @@ export default function Categories() {
       originalPrice: 750,
       discountedPrice: 450
     },
-  ];
-
-  const [products, setProducts] = useState(productType);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get("http://localhost:8011/api/products");
-        const oilProducts = res.data.filter(
-          (product) => product.category?.toLowerCase() === "oils"
-        );
-        setProducts(oilProducts);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const filteredProducts = products.filter((card) =>
-    card.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ];*/}
 
  
 
-  return (
+  
+
+ 
+
+ {/*} return (
     <>
     <Navbar_Menu/>
       <div
@@ -243,7 +285,7 @@ export default function Categories() {
 
           {/* CATEGORIES */}
 
-          <div
+        {/*}  <div
             style={{
               backgroundColor: "#ffff",
               padding: "20px",
@@ -262,7 +304,10 @@ export default function Categories() {
                   >
                     Categories
                   </h4>
-                  <ProductAccordian />
+                  <ProductAccordian 
+                  onCategorySelect={handleCategorySelect}
+                  currentCategory={selectedCategory}
+/>
                 </Col>
 
                 <Col md={9} >
@@ -275,40 +320,43 @@ export default function Categories() {
                       fontFamily: "montserrat",
                     }}
                   >
-                    You are viewing: Oils
+                    You are viewing: {selectedCategory || "Select a Category"}
                   </h1>
 
+                    {selectedCategory === null ? (
+                  <p>Please select a category to view products.</p>
+                ) : loading ? (
+                  <p>Loading products...</p>
+                ) : error ? (
+                  <p>{error}</p>
+                ) : filteredProducts.length === 0 ? (
+                  <p>No products found for this category.</p>
+                ) : (
                   <div
                     className="product-grid"
                     style={{
                       display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(240px, 1fr))",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
                       gap: "30px",
                       marginTop: "3%",
                     }}
                   >
                     {filteredProducts.map((item) => (
-
-                      <Link key={item.id} 
-                      to={item.Link ? item.Link : `/product-page/${item.Link}`}
-                       style={{ textDecoration: "none", color: "inherit" }}>
-
-                <div className="product-card" >
-                        <img
-                          src={
-                            item.images[0].startsWith("/media")
-                              ? item.images[0]
-                              : `http://localhost:8011${item.images[0]}`
-                          }
-                          alt={item.name}
-                          style={{
-                            width: "100%",
-                            height: "240px",
-                            objectFit: "contain",
-                          }}
-                        />
-                        
+                      <Link
+                        key={item.id}
+                        to={item.Link}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <div className="product-card">
+                         <img
+  src={`https://api.themysoreoils.com${item.images[0]}`}
+  alt={item.name}
+  style={{
+    width: "100%",
+    height: "240px",
+    objectFit: "contain",
+  }}
+/>
 
                         <h4
                           style={{
@@ -355,18 +403,340 @@ export default function Categories() {
                       </Link>
                     ))}
                   </div>
+                )}
                 </Col>
               </Row>
             </Container>
           </div>
 
           {/* REVIEWS */}
-          <Reviews />
+        {/*}  <Reviews />
 
           <ScrollToTop />
 
           {/* FOOTER */}
-           <Footer /> 
+           {/*<Footer /> 
+        </div>
+      </div>
+    </>
+  );
+}*/}
+
+
+import {
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+import Reviews from "./Reviews";
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import ScrollToTop from "../components/ScrollToTop";
+import ProductAccordian from "./ProductAccordian";
+import Footer from "../components/Footer";
+import Navbar_Menu from "../components/Navbar_Menu";
+
+export default function Categories() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // read ?category= from URL; handles kebab-case -> Title Case
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const categoryFromURL = queryParams.get("category");
+    if (categoryFromURL) {
+      const formattedCategory = categoryFromURL
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+      setSelectedCategory(formattedCategory);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("https://api.themysoreoils.com/api/categories");
+        setCategories((res.data || []).filter((cat) => cat.status === "Active"));
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // --- robust sale/MRP resolver (same idea as PDP) ---
+  const resolveVariantPrice = (variant, productLevelMRP) => {
+    const vPrice = Number(variant?.price) || 0;
+    const vDisc  = Number(variant?.discountPrice) || 0;
+    const pMrp   = Number(productLevelMRP) || 0;
+
+    // Case A: explicit discount where discountPrice is the SALE
+    if (vDisc > 0 && vDisc < vPrice) {
+      return { sale: vDisc, mrp: vPrice };
+    }
+    // Case B: discountPrice is actually the MRP (e.g., 350 price, 500 discountPrice)
+    if (vDisc > vPrice) {
+      return { sale: vPrice, mrp: vDisc };
+    }
+    // Case C: no per-variant discount; maybe product-level MRP exists
+    if (pMrp > vPrice) {
+      return { sale: vPrice, mrp: pMrp };
+    }
+    // Fallback: no discount
+    return { sale: vPrice, mrp: vPrice };
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await axios.get("https://api.themysoreoils.com/api/products");
+        const all = Array.isArray(res.data) ? res.data : [];
+
+        const formattedProducts = all.map((product) => {
+          const variants = Array.isArray(product?.variants) ? product.variants : [];
+
+          // choose the variant with the lowest SALE price for the card
+          let best = null; // { sale, mrp, variant }
+          variants.forEach((v) => {
+            const { sale, mrp } = resolveVariantPrice(v, product?.discountPrice);
+            if (!best || sale < best.sale) {
+              best = { sale, mrp, variant: v };
+            }
+          });
+
+          // fallback if product has no variants
+          if (!best) {
+            const pMrp = Number(product?.discountPrice) || 0;
+            const sale = pMrp || 0;
+            best = { sale, mrp: sale, variant: null };
+          }
+
+          const salePrice = Number(best.sale) || 0;
+          const mrp = Number(best.mrp) || salePrice;
+
+          return {
+            id: product._id,
+            name: product.name,
+            images: product.images || [],
+            category: product.category,
+            Link: `/oil-products/${String(product.name || "")
+              .trim()
+              .replace(/\s+/g, "")}`,
+            originalPrice: mrp,        // MRP (strike-through)
+            discountPrice: salePrice,  // sale (prominent)
+          };
+        });
+
+        setProducts(formattedProducts);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch products");
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleCategorySelect = (categoryName) => {
+    if (categoryName === "All") {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(categoryName);
+    }
+  };
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
+  return (
+    <>
+      <Navbar_Menu />
+      <div
+        className="page-content"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transition: "opacity 0.5s ease-in-out",
+        }}
+      >
+        <div>
+          <div style={{ backgroundColor: "#ffff", padding: "20px", color: "#002209" }}>
+            <Container className="mt-4">
+              <Row>
+                <Col md={3} className="category-sidebar">
+                  <h4
+                    style={{
+                      fontWeight: "700",
+                      marginBottom: "20px",
+                      fontFamily: "montserrat",
+                    }}
+                  >
+                    Categories
+                  </h4>
+                  <ProductAccordian
+                    onCategorySelect={handleCategorySelect}
+                    currentCategory={selectedCategory}
+                  />
+                </Col>
+
+                <Col md={9}>
+                  {selectedCategory && (
+                    <h1
+                      style={{
+                        textAlign: "left",
+                        fontSize: "25px",
+                        fontWeight: "700",
+                        marginBottom: "50px",
+                        fontFamily: "montserrat",
+                      }}
+                    >
+                      You are viewing: {selectedCategory}
+                    </h1>
+                  )}
+
+                  {loading ? (
+                    <p>Loading products...</p>
+                  ) : error ? (
+                    <p>{error}</p>
+                  ) : filteredProducts.length === 0 ? (
+                    <p style={{ fontFamily: "montserrat", fontSize: "30px", fontWeight: "bold" }}>
+                      Coming Soon
+                    </p>
+                  ) : (
+                    <div
+                      className="product-grid"
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                        gap: "30px",
+                        marginTop: "3%",
+                      }}
+                    >
+                      {filteredProducts.map((item) => {
+                        const hasDiscount = item.originalPrice > item.discountPrice;
+                        const pct =
+                          hasDiscount && item.originalPrice > 0
+                            ? Math.round(((item.originalPrice - item.discountPrice) / item.originalPrice) * 100)
+                            : 0;
+
+                        return (
+                          <Link
+                            key={item.id}
+                            to={item.Link}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                          >
+                            <div className="product-card">
+                              <img
+                                src={`https://api.themysoreoils.com${item.images[0] || ""}`}
+                                alt={item.name}
+                                style={{
+                                  width: "100%",
+                                  height: "240px",
+                                  objectFit: "contain",
+                                }}
+                                onError={(e) => { e.currentTarget.src = "/media/fallback.png"; }}
+                              />
+                              <h4
+                                style={{
+                                  fontSize: "16px",
+                                  fontWeight: "600",
+                                }}
+                              >
+                                {item.name}
+                              </h4>
+
+                              <div
+                                className="product-price"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "baseline",
+                                  gap: "8px",
+                                  marginBottom: "8px",
+                                }}
+                              >
+                                {/* MRP (strike-through) — only when discounted */}
+                                {hasDiscount && (
+                                  <p
+                                    style={{
+                                      opacity: 0.5,
+                                      textDecoration: "line-through",
+                                      fontSize: "16px",
+                                      margin: 0,
+                                      fontWeight: "700",
+                                      whiteSpace: "nowrap",
+                                    }}
+                                  >
+                                    Rs {item.originalPrice}
+                                  </p>
+                                )}
+
+                                {/* Sale price (prominent) */}
+                                <p
+                                  style={{
+                                    fontSize: "18px",
+                                    fontWeight: "700",
+                                    margin: 0,
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  Rs {item.discountPrice}
+                                </p>
+                              </div>
+
+                              {/* Optional % OFF badge */}
+                             {/*} {hasDiscount && (
+                                <div
+                                  style={{
+                                    display: "inline-block",
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    background: "#e6ffed",
+                                    color: "#137333",
+                                    padding: "2px 8px",
+                                    borderRadius: "12px",
+                                  }}
+                                >
+                                  {pct}% OFF
+                                </div>
+                              )}*/}
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </Container>
+          </div>
+
+          {/*<Reviews />*/}
+          <ScrollToTop />
+          <Footer />
         </div>
       </div>
     </>

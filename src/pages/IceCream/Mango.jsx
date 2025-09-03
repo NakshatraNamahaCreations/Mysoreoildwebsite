@@ -4,7 +4,7 @@ import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import Navbar_Menu from "../../components/Navbar_Menu";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addToCart } from "../../redux/cartslice";
+import { addToCart } from "../../redux/cartSlice";
 
 
 
@@ -155,11 +155,11 @@ const handleAddToCart = () => {
                     selectedWeight === weight ? "#00614A" : "transparent",
                   padding: "6px 14px",
                   fontSize: "16px",
-                  borderRadius: "0",
+                  borderRadius: "25px",
                   fontWeight: "500",
                   letterSpacing: "1px",
                   transition: "all 0.3s ease",
-                  borderRadius: "25px",
+                  
                 }}
               >
                 {weight}

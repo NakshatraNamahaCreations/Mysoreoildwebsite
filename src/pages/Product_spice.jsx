@@ -20,7 +20,7 @@ import axios from 'axios'
 // import Footer from "../components/Footer";
 import { useParams } from "react-router-dom";
 import product from "/media/product-oil.png";
-import { addToCart } from "../redux/cartslice";
+import { addToCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Whishlistheart from "/media/Whishlistheart.png";
